@@ -1,0 +1,675 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ffeaf3">
+  <title>Salem, Will You Be My JULIET? 💗</title>
+
+  <style>
+    :root {
+      --pink: #ff8fbd;
+      --rose: #dc4f8d;
+      --plum: #753853;
+      --night: #071b2b;
+      --mint: #a9f6c8;
+      --gold: #fff0a9;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      font-family: Georgia, "Times New Roman", serif;
+    }
+
+    body {
+      min-height: 100vh;
+      min-height: 100dvh;
+      background: linear-gradient(145deg, #ffe0ed, #fff8fc 55%, #f2e3ff);
+      color: var(--plum);
+      overflow-x: hidden;
+    }
+
+    button {
+      font: inherit;
+      touch-action: manipulation;
+      cursor: pointer;
+    }
+
+    button:focus-visible {
+      outline: 3px solid #a52f68;
+      outline-offset: 4px;
+    }
+
+    .screen {
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px 14px;
+      position: relative;
+    }
+
+    .hidden { display: none !important; }
+
+    .card {
+      width: min(100%, 480px);
+      padding: clamp(22px, 6vw, 34px) 22px;
+      text-align: center;
+      background: #ffffffdf;
+      border: 2px solid white;
+      border-radius: 30px;
+      box-shadow: 0 18px 60px #c85b922b;
+      position: relative;
+      z-index: 1;
+    }
+
+    h1 {
+      font-size: clamp(2.25rem, 9vw, 3.4rem);
+      line-height: 1.05;
+      color: #cb4d86;
+      font-weight: normal;
+      margin: 12px 0;
+    }
+
+    h2 {
+      font-weight: normal;
+      color: var(--gold);
+      font-size: clamp(1.6rem, 7vw, 2.2rem);
+    }
+
+    p { line-height: 1.7; }
+
+    .kicker {
+      font: 11px/1.8 Arial, sans-serif;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: #b45b82;
+    }
+
+    .big {
+      font-size: clamp(65px, 18vw, 90px);
+      line-height: 1.25;
+      animation: bob 1.3s ease-in-out infinite alternate;
+    }
+
+    .btn {
+      min-height: 48px;
+      border: 0;
+      border-radius: 999px;
+      padding: 14px 24px;
+      font-weight: bold;
+      box-shadow: 0 7px 18px #dc4f8d38;
+    }
+
+    .yes {
+      background: linear-gradient(135deg, #ff9fc7, #e45191);
+      color: white;
+    }
+
+    .no {
+      background: white;
+      color: #bd4c80;
+      border: 1px solid #f2bfd4;
+      box-shadow: none;
+    }
+
+    .choice-row {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      margin: 22px 0 8px;
+      min-height: 60px;
+    }
+
+    #noBtn {
+      position: relative;
+      z-index: 3;
+    }
+
+    .note {
+      font-size: 13px;
+      color: #a96b88;
+    }
+
+    #yesScreen {
+      background: linear-gradient(145deg, #ffe0ed, #fff8fc, #f0e2ff);
+    }
+
+    #questScreen {
+      display: block;
+      padding: 16px 12px 22px;
+      background: radial-gradient(ellipse at 50% 20%, #17465a, #081b2b 72%);
+    }
+
+    .quest {
+      width: min(100%, 650px);
+      margin: 0 auto;
+      color: #e5f8ec;
+    }
+
+    .hud {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      font: 12px Arial, sans-serif;
+      letter-spacing: .08em;
+      color: #bdf5d7;
+      margin: 5px 2px 10px;
+    }
+
+    #pond {
+      height: min(57dvh, 470px);
+      min-height: 330px;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #72d6be77;
+      border-radius: 25px;
+      background: linear-gradient(#0b2a40 0%, #123f52 34%, #16586a 73%, #0b3544 100%);
+      box-shadow: inset 0 0 40px #04131eaa, 0 12px 40px #0004;
+      touch-action: manipulation;
+    }
+
+    #pond::before {
+      content: "";
+      position: absolute;
+      left: -20%;
+      top: 48%;
+      width: 140%;
+      height: 100%;
+      border-radius: 50% 50% 0 0;
+      background: repeating-radial-gradient(
+        ellipse at 50% 0%,
+        transparent 0 24px,
+        #8ce7d31a 25px 27px,
+        transparent 28px 55px
+      );
+      pointer-events: none;
+    }
+
+    .moon {
+      position: absolute;
+      top: 8%;
+      right: 13%;
+      font-size: 42px;
+      color: var(--gold);
+      text-shadow: 0 0 20px #fff0b577;
+    }
+
+    .star {
+      position: absolute;
+      color: #e8ffd1;
+      text-shadow: 0 0 12px #b4ffd7;
+      animation: twinkle 2s infinite alternate;
+    }
+
+    .reed {
+      position: absolute;
+      bottom: 6%;
+      font-size: 35px;
+      opacity: .85;
+    }
+
+    #lily {
+      position: absolute;
+      width: 46%;
+      max-width: 250px;
+      height: 100px;
+      left: 50%;
+      bottom: 12%;
+      transform: translateX(-50%);
+      background: radial-gradient(ellipse at 48% 45%, #79d99d, #25835f 63%, #145741 100%);
+      clip-path: ellipse(50% 40% at 50% 50%);
+      filter: drop-shadow(0 9px 8px #041b20);
+      z-index: 2;
+    }
+
+    #lily::after {
+      content: "";
+      position: absolute;
+      right: 4%;
+      top: 5%;
+      height: 55%;
+      width: 42%;
+      background: #145741;
+      clip-path: polygon(0 0, 100% 0, 0 100%);
+    }
+
+    #frog {
+      position: absolute;
+      z-index: 4;
+      left: 50%;
+      bottom: 22%;
+      transform: translateX(-50%) scale(1);
+      transform-origin: 50% 85%;
+      font-size: clamp(62px, 17vw, 92px);
+      line-height: 1;
+      filter: drop-shadow(0 5px 8px #001b20aa);
+      transition: transform .45s cubic-bezier(.2, 1.6, .4, 1);
+    }
+
+    .firefly {
+      position: absolute;
+      z-index: 5;
+      border: 0;
+      background: transparent;
+      padding: 9px;
+      font-size: 30px;
+      line-height: 1;
+      filter: drop-shadow(0 0 12px #fff59b);
+      animation: glow .7s ease-in-out infinite alternate;
+    }
+
+    .meter {
+      height: 7px;
+      background: #ffffff24;
+      border-radius: 99px;
+      overflow: hidden;
+      margin: 10px 0;
+    }
+
+    #fill {
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, #fff2a5, #a6f5c8);
+      transition: width .25s;
+    }
+
+    #questHint {
+      min-height: 48px;
+      text-align: center;
+      color: #c6f5e0;
+      margin: 10px 0;
+    }
+
+    #endScreen {
+      background: radial-gradient(ellipse at center, #174a55, #06131f 78%);
+      color: #e8f9ee;
+    }
+
+    .end-card {
+      width: min(100%, 480px);
+      padding: 27px 22px;
+      text-align: center;
+      border: 1px solid #a6f5c866;
+      border-radius: 28px;
+      background: #071b2add;
+      box-shadow: 0 0 65px #a6f5c81a;
+      position: relative;
+      z-index: 1;
+    }
+
+    #endFrog {
+      font-size: 78px;
+      animation: hop 1s ease-in-out infinite alternate;
+    }
+
+    #reveal {
+      font-size: clamp(2.8rem, 12vw, 4.6rem);
+      line-height: 1.08;
+      color: #fff2c2;
+      text-shadow: 0 0 22px #ff9bc888;
+      margin: 16px 0;
+      animation: reveal .8s both;
+    }
+
+    .signature {
+      font-size: 21px;
+      color: #fff0b5;
+    }
+
+    #effects {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .float {
+      position: absolute;
+      bottom: -45px;
+      animation: rise 4.8s linear forwards;
+    }
+
+    .burst {
+      position: absolute;
+      animation: burst .9s ease-out forwards;
+      font-size: 27px;
+    }
+
+    @keyframes bob {
+      to { transform: translateY(-8px) rotate(4deg); }
+    }
+
+    @keyframes glow {
+      to {
+        transform: scale(1.15);
+        filter: drop-shadow(0 0 18px #fff6a8);
+      }
+    }
+
+    @keyframes twinkle {
+      to { opacity: .35; transform: scale(.8); }
+    }
+
+    @keyframes rise {
+      to {
+        transform: translateY(-115vh) rotate(35deg);
+        opacity: 0;
+      }
+    }
+
+    @keyframes burst {
+      0% { transform: scale(.3); opacity: 0; }
+      35% { transform: scale(1.3); opacity: 1; }
+      100% { transform: translateY(-80px) scale(.9); opacity: 0; }
+    }
+
+    @keyframes reveal {
+      from { opacity: 0; transform: scale(.6); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes hop {
+      to { transform: translateY(-9px) rotate(5deg); }
+    }
+
+    @media (max-width: 360px) {
+      .choice-row { gap: 8px; }
+      .btn { padding: 13px 18px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+<div id="effects" aria-hidden="true"></div>
+
+<section id="askScreen" class="screen">
+  <div class="card">
+    <div class="kicker">a tiny question for someone special</div>
+    <div class="big">💌🌷</div>
+    <h1>Salem,<br>will you be<br>my Juliet?</h1>
+    <p>I made a little surprise just for you. Choose wisely... 👀💗</p>
+
+    <div class="choice-row" id="choiceRow">
+      <button class="btn yes" id="yesBtn">YES 💗</button>
+      <button class="btn no" id="noBtn">NO 🙈</button>
+    </div>
+
+    <p class="note" id="askNote">There may or may not be a tiny frog involved. 🐸</p>
+  </div>
+</section>
+
+<section id="yesScreen" class="screen hidden">
+  <div class="card">
+    <div class="big">🥹💖</div>
+    <div class="kicker">excellent choice, Salem</div>
+    <h1>YAYYYYY!</h1>
+    <p>You just made a tiny frog very happy. 🌸</p>
+    <p>Ready for your magical surprise?</p>
+    <button class="btn yes" id="continueBtn">Take me to the pond ✨</button>
+  </div>
+</section>
+
+<section id="questScreen" class="screen hidden">
+  <div class="quest">
+    <div class="hud">
+      <span>🌙 THE MAGICAL POND</span>
+      <span id="count">FIREFLIES 0 / 7</span>
+    </div>
+
+    <h2 style="text-align:center">Feed the little frog 🐸</h2>
+    <div class="meter"><div id="fill"></div></div>
+
+    <div id="pond" aria-label="Magical lake with frog on a lily pad">
+      <span class="moon">☾</span>
+      <span class="star" style="top:13%;left:13%">✦</span>
+      <span class="star" style="top:29%;right:12%;animation-delay:.8s">✧</span>
+      <span class="star" style="top:17%;left:69%;animation-delay:1.2s">✦</span>
+      <span class="reed" style="left:2%">🌾</span>
+      <span class="reed" style="right:3%">🌿</span>
+      <div id="lily"></div>
+      <div id="frog" aria-label="Little frog">🐸</div>
+    </div>
+
+    <p id="questHint" aria-live="polite">Tap the glowing fireflies to feed your froggy friend! ✨</p>
+
+    <div class="hud">
+      <span>Frog's dinner</span>
+      <span id="dinnerCount">0 / 7</span>
+    </div>
+  </div>
+</section>
+
+<section id="endScreen" class="screen hidden">
+  <div class="end-card">
+    <div id="endFrog">🐸💚</div>
+    <div class="kicker">a tiny frog-sized secret</div>
+    <h1 id="reveal">YOU'RE CUTE! 💗</h1>
+    <p>The frog ate every firefly, got SUPER full...</p>
+    <h2>...and went POP! 💥</h2>
+    <p>Leaving a whole bunch of tiny hearts just for you.</p>
+    <div style="font-size:32px;letter-spacing:4px">💗 💕 💖 💕 💗</div>
+    <p class="signature">I love you from Romeo ♡</p>
+    <button class="btn yes" id="replayBtn">One more time? 🌙</button>
+  </div>
+</section>
+
+<script>
+  const screens = ["askScreen", "yesScreen", "questScreen", "endScreen"]
+    .map(id => document.getElementById(id));
+
+  const pond = document.getElementById("pond");
+  const frog = document.getElementById("frog");
+  const effects = document.getElementById("effects");
+  const count = document.getElementById("count");
+  const dinnerCount = document.getElementById("dinnerCount");
+  const fill = document.getElementById("fill");
+  const hint = document.getElementById("questHint");
+
+  let caught = 0;
+  let spawnTimer = null;
+  let fireflies = [];
+  let finished = false;
+  let noDodges = 0;
+
+  function show(id) {
+    screens.forEach(screen => {
+      screen.classList.toggle("hidden", screen.id !== id);
+    });
+  }
+
+  function moveNo() {
+    const btn = document.getElementById("noBtn");
+    const margin = 12;
+    const maxX = Math.max(margin, window.innerWidth - btn.offsetWidth - margin);
+    const maxY = Math.max(margin, window.innerHeight - btn.offsetHeight - margin);
+
+    btn.style.position = "fixed";
+    btn.style.zIndex = "20";
+    btn.style.left = (margin + Math.random() * Math.max(0, maxX - margin)) + "px";
+    btn.style.top = (margin + Math.random() * Math.max(0, maxY - margin)) + "px";
+
+    noDodges++;
+    const messages = [
+      "Hehe, too slow! 🙈",
+      "The NO button is shy... 🏃‍♀️",
+      "A tiny frog says: choose YES! 🐸",
+      "You almost got it! 😂💗"
+    ];
+    document.getElementById("askNote").textContent =
+      messages[Math.min(noDodges - 1, messages.length - 1)];
+  }
+
+  const noBtn = document.getElementById("noBtn");
+  noBtn.addEventListener("pointerenter", moveNo);
+  noBtn.addEventListener("touchstart", event => {
+    event.preventDefault();
+    moveNo();
+  }, { passive: false });
+  noBtn.addEventListener("click", moveNo);
+
+  document.getElementById("yesBtn").addEventListener("click", () => {
+    noBtn.style.position = "";
+    noBtn.style.left = "";
+    noBtn.style.top = "";
+    show("yesScreen");
+    celebrateSmall();
+  });
+
+  document.getElementById("continueBtn").addEventListener("click", startQuest);
+
+  document.getElementById("replayBtn").addEventListener("click", () => {
+    clearInterval(spawnTimer);
+    effects.innerHTML = "";
+    caught = 0;
+    finished = false;
+    show("askScreen");
+  });
+
+  function startQuest() {
+    clearInterval(spawnTimer);
+    caught = 0;
+    finished = false;
+    fireflies.forEach(firefly => firefly.remove());
+    fireflies = [];
+
+    frog.style.transform = "translateX(-50%) scale(1)";
+    count.textContent = "FIREFLIES 0 / 7";
+    dinnerCount.textContent = "0 / 7";
+    fill.style.width = "0%";
+    hint.textContent = "Tap the glowing fireflies to feed your froggy friend! ✨";
+    effects.innerHTML = "";
+
+    show("questScreen");
+
+    for (let i = 0; i < 4; i++) spawnFirefly();
+
+    spawnTimer = setInterval(() => {
+      if (!finished && caught < 7 &&
+        fireflies.filter(firefly => firefly.isConnected).length < 5) {
+        spawnFirefly();
+      }
+    }, 900);
+  }
+
+  function spawnFirefly() {
+    if (finished || caught >= 7) return;
+
+    const firefly = document.createElement("button");
+    firefly.type = "button";
+    firefly.className = "firefly";
+    firefly.textContent = "✨";
+    firefly.setAttribute("aria-label", "Catch firefly");
+
+    const maxX = Math.max(10, pond.clientWidth - 50);
+    const maxY = Math.max(70, pond.clientHeight - 130);
+
+    firefly.style.left = (8 + Math.random() * Math.max(1, maxX - 8)) + "px";
+    firefly.style.top = (12 + Math.random() * Math.max(1, maxY - 12)) + "px";
+
+    firefly.addEventListener("click", () => {
+      if (finished || firefly.dataset.caught) return;
+
+      firefly.dataset.caught = "true";
+      const x = firefly.offsetLeft;
+      const y = firefly.offsetTop;
+      firefly.remove();
+
+      caught++;
+      frog.style.transform = "translateX(-50%) scale(" + (1 + caught * 0.09) + ")";
+      count.textContent = "FIREFLIES " + caught + " / 7";
+      dinnerCount.textContent = caught + " / 7";
+      fill.style.width = (caught / 7 * 100) + "%";
+
+      const messages = [
+        "Munch! A little light for our froggy friend. ✨",
+        "That one tasted like stardust! 🌟",
+        "Ribbit! Thank you! 🐸",
+        "Look at those froggy cheeks! 💚",
+        "The frog is getting pleasantly plump...",
+        "One more snack! 🌙",
+        "OH NO, TOO FULL! 💥"
+      ];
+      hint.textContent = messages[caught - 1];
+      popAt(x, y);
+
+      if (caught === 7) {
+        finished = true;
+        clearInterval(spawnTimer);
+        setTimeout(explode, 850);
+      }
+    });
+
+    pond.appendChild(firefly);
+    fireflies.push(firefly);
+
+    setTimeout(() => {
+      if (firefly.isConnected) firefly.remove();
+    }, 6500);
+  }
+
+  function popAt(x, y) {
+    for (let i = 0; i < 3; i++) {
+      const particle = document.createElement("span");
+      particle.className = "burst";
+      particle.textContent = ["💛", "✨", "💚"][i];
+      particle.style.left = (x + Math.random() * 35) + "px";
+      particle.style.top = (y + Math.random() * 30) + "px";
+      pond.appendChild(particle);
+      particle.addEventListener("animationend", () => particle.remove());
+    }
+  }
+
+  function explode() {
+    show("endScreen");
+
+    const icons = ["💗", "💕", "💖", "💞", "💘", "❤️", "✨"];
+
+    for (let i = 0; i < 75; i++) {
+      const particle = document.createElement("span");
+      particle.className = "float";
+      particle.textContent = icons[Math.floor(Math.random() * icons.length)];
+      particle.style.left = Math.random() * 100 + "vw";
+      particle.style.fontSize = (17 + Math.random() * 24) + "px";
+      particle.style.animationDelay = Math.random() * 1.5 + "s";
+      particle.style.animationDuration = (3 + Math.random() * 3) + "s";
+
+      effects.appendChild(particle);
+      particle.addEventListener("animationend", () => particle.remove());
+    }
+  }
+
+  function celebrateSmall() {
+    effects.innerHTML = "";
+
+    for (let i = 0; i < 24; i++) {
+      const particle = document.createElement("span");
+      particle.className = "float";
+      particle.textContent = ["💗", "💕", "✨", "🌸"][i % 4];
+      particle.style.left = Math.random() * 100 + "vw";
+      particle.style.animationDelay = Math.random() + "s";
+
+      effects.appendChild(particle);
+      particle.addEventListener("animationend", () => particle.remove());
+    }
+  }
+</script>
+</body>
+</html>
